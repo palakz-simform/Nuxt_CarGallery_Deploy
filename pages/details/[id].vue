@@ -25,8 +25,6 @@
 </template>
 
 <script setup>
-import { useCarStore } from '../../stores/car'
-const carStore = useCarStore()
 const route = useRoute();
 
 useHead({

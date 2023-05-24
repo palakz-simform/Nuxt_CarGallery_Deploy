@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 
-// useNuxtApp().$axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('token')
 let headers = ""
 if (process.client) {
     headers = {
@@ -30,11 +29,10 @@ export const useCarStore = defineStore('car', {
     },
     actions: {
         // fetching data
+        alertData(form) {
+            alert((this.addForm == true ? 'Created' : 'Edited') + ' data: \n\nName: ' + form.name + '\n\nImage:' + form.image + '\n\nDescription :' + form.description + '\n\nPrice Rs.:' + form.price)
+        },
         async getData() {
-            // const data = await useFetchCars()
-            // console.log(data.value.data)
-            // this.cars_info = data.value.data
-
             useNuxtApp().$axios.get("https://testapi.io/api/dartya/resource/cardata",
                 { headers }).then((response) => {
                     this.cars_info = response.data.data
@@ -56,6 +54,7 @@ export const useCarStore = defineStore('car', {
             }, { headers }).then((res) => {
                 if (res.status === 201) {
                     this.getData()
+                    return true
                 } else {
                     alert("Error!!")
                 }
@@ -84,13 +83,14 @@ export const useCarStore = defineStore('car', {
             }, { headers }).then((res) => {
                 if (res.status === 200) {
                     this.getData()
+                    this.alertData(data)
                 } else {
                     alert("Error!!")
                 }
                 this.editForm = false
 
-            }).catch(error => {
-                alert("Error : " + error)
+            }).catch(() => {
+                alert("Error !! Failed to Edit Car Data")
             });
 
         },
